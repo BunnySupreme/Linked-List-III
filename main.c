@@ -557,8 +557,66 @@ node* findAndReplaceNode (node* head, int value, node* newNode)
     return head;
 }
 
-//delete
-//find by value
+node* switchWithNextNode (node* head, node* firstNode, node* prevNode)
+{
+    if (firstNode == NULL || firstNode->next == NULL)
+    {
+        return head;
+    }
+
+
+    node* secondNode = firstNode->next;
+    if (firstNode == head)
+    {
+        head = secondNode;
+    }
+    else
+    {
+        prevNode->next = secondNode;
+    }
+    firstNode->next = secondNode->next;
+    secondNode->next = firstNode;
+    return head;
+}
+
+//not finished
+node* sortByValue (node* head)
+{
+    node* currentNode = head;
+    node* prevNode = NULL;
+    while (currentNode != NULL && currentNode->next != NULL)
+    {
+        if (currentNode > currentNode->next)
+        {
+            head = switchWithNextNode(head, currentNode, prevNode);
+        }
+        prevNode = currentNode;
+        currentNode = currentNode->next;
+    }
+    return head;
+}
+
+node* reverseList (node* head)
+{
+    node* currentNode = head->next;
+    head->next = NULL;  //head becomes tail, so next Node is NULL
+    node* prevNode = head;  //prevNode initialized with first value, which is hea
+    node* nextNode = currentNode->next;
+    while (currentNode->next != NULL)
+    {
+        currentNode->next =  prevNode; //attach to previous node, from behind
+
+        prevNode = currentNode;
+        currentNode = nextNode;
+        nextNode = currentNode->next;
+
+    }
+
+    currentNode->next = prevNode;
+    head = currentNode;
+    return head;
+}
+
 //delete by value
 //sort by value
 
@@ -588,9 +646,15 @@ int main()
     addBackRef(&head, createNode(901));
 
 
+
+
     printList(head);
 
+    head = reverseList(head);
 
+    printList(head);
+
+    head = sortByValue(head);
 
     printList(head);
 
